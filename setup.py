@@ -19,5 +19,6 @@ setup(
         "pyarrow",
         "psutil",
         "numpy",
+        "s3fs",
     ],
 )

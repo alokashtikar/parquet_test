@@ -2,6 +2,18 @@ import os
 import psutil
 from contextlib import contextmanager
 import time
+from pathlib import Path
+
+
+def data_path(filename: str):
+    """
+    Resolve a data file path, supporting local data/ directory or an S3 prefix
+    via DATA_PREFIX env var (e.g., s3://my-bucket/path).
+    """
+    prefix = os.getenv("DATA_PREFIX")
+    if prefix:
+        return f"{prefix.rstrip('/')}/{filename}"
+    return Path(__file__).resolve().parents[1] / "data" / filename
 
 
 def current_memory_mb() -> float:

@@ -2,13 +2,18 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 
+from utils import data_path
+
 N_ROWS = 1_000_000  # adjust based on your machine
 ROW_GROUP_SIZE = 100_000
 
 
 def main():
-    out_dir = Path(__file__).resolve().parents[1] / "data"
-    out_dir.mkdir(exist_ok=True)
+    csv_path = data_path("big.csv")
+    parquet_path = data_path("big.parquet")
+
+    if isinstance(csv_path, Path):
+        csv_path.parent.mkdir(exist_ok=True)
 
     print("Generating synthetic data...")
     df = pd.DataFrame(
@@ -27,9 +32,6 @@ def main():
             ),
         }
     )
-
-    csv_path = out_dir / "big.csv"
-    parquet_path = out_dir / "big.parquet"
 
     print(f"Saving CSV to {csv_path}...")
     df.to_csv(csv_path, index=False)

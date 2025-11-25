@@ -1,10 +1,8 @@
 import pandas as pd
-from pathlib import Path
 
-from utils import measure_peak_memory
+from utils import measure_peak_memory, data_path
 
-DATA_DIR = Path(__file__).resolve().parents[1] / "data"
-PARQUET_PATH = DATA_DIR / "big.parquet"
+PARQUET_PATH = data_path("big.parquet")
 
 
 def load_all_columns():
