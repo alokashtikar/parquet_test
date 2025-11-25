@@ -9,6 +9,9 @@ def read_entire_file_at_once():
     with measure_peak_memory("Parquet read_table (all at once)"):
         pf = pq.ParquetFile(PARQUET_PATH)
         table = pf.read()
+        head = table.slice(0, 5).to_pandas()
+        print("Top 5 rows (full table):")
+        print(head)
         _ = table.column("value1").to_pandas().mean()
 
 
@@ -17,8 +20,13 @@ def stream_in_batches():
         pf = pq.ParquetFile(PARQUET_PATH)
         total = 0.0
         count = 0
+        printed_head = False
 
         for batch in pf.iter_batches(batch_size=50_000, columns=["value1"]):
+            if not printed_head:
+                print("Top 5 rows (first batch):")
+                print(batch.slice(0, 5).to_pandas())
+                printed_head = True
             col = batch.column("value1")
             total += col.to_pandas().sum()
             count += len(col)
@@ -36,6 +44,9 @@ def read_filtered_rows():
             filter=ds.field("category") == "A",
             columns=["id", "category", "value1"],
         )
+        head = table.slice(0, 5).to_pandas()
+        print("Top 5 rows (filtered scan):")
+        print(head)
         _ = table.num_rows
         print(f"Filtered rows: {table.num_rows}")
 

@@ -8,6 +8,8 @@ PARQUET_PATH = data_path("big.parquet")
 def load_all_columns():
     with measure_peak_memory("Parquet all columns"):
         df = pd.read_parquet(PARQUET_PATH, engine="pyarrow")
+        print("Top 5 rows (all columns):")
+        print(df.head(5))
         _ = df["value1"].mean()
 
 
@@ -18,6 +20,8 @@ def load_few_columns():
             engine="pyarrow",
             columns=["id", "value1"],
         )
+        print("Top 5 rows (subset):")
+        print(df.head(5))
         _ = df["value1"].mean()
 
 

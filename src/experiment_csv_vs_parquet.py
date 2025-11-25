@@ -14,6 +14,8 @@ def load_parquet_full():
     parquet_path = data_path("big.parquet")
     with measure_peak_memory("Parquet full load"):
         df = pd.read_parquet(parquet_path, engine="pyarrow")
+        print("Top 5 rows from Parquet:")
+        print(df.head(5))
         _ = df["value1"].mean()
 
 
